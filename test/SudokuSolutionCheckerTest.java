@@ -42,7 +42,7 @@ public class SudokuSolutionCheckerTest {
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 4, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertFalse(checker.doesMatrixHaveDuplicateInLine(matrixArray, size));
+        assertFalse(checker.hasNoDuplicatesInLine(matrixArray, size));
     }
 
     @Test
@@ -51,6 +51,24 @@ public class SudokuSolutionCheckerTest {
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertTrue(checker.doesMatrixHaveDuplicateInLine(matrixArray, size));
+        assertTrue(checker.hasNoDuplicatesInLine(matrixArray, size));
+    }
+
+    @Test
+    void matrixWithDuplicateInColumnIsNotValid() {
+        int size = 4;
+        int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 4, 2}, {4, 3, 2, 1}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertFalse(checker.hasNoDuplicatesInColumn(matrixArray, size));
+    }
+
+    @Test
+    void matrixWithNoDuplicatesInColumnsIsValid() {
+        int size = 4;
+        int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertTrue(checker.hasNoDuplicatesInColumn(matrixArray, size));
     }
 }
