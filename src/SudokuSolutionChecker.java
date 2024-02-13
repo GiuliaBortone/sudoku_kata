@@ -14,13 +14,19 @@ public class SudokuSolutionChecker {
         return (n * n == size) && (n * n > 3);
     }
 
-    public boolean hasNoDuplicatesInLine(int[][] matrixArray) {
+    public boolean hasNoDuplicatesInRowAndColumnAndSquare(int[][] matrixArray) {
+        return hasNoDuplicatesInRow(matrixArray)
+                && hasNoDuplicatesInColumn(matrixArray)
+                && hasNoDuplicatesInSquares(matrixArray);
+    }
+
+    private boolean hasNoDuplicatesInRow(int[][] matrixArray) {
         int size = matrixArray[0].length;
 
         for (int row = 0; row < size; row++) {
             int[] matrixRow = matrixArray[row];
 
-            if (Arrays.stream(matrixRow).distinct().count() < size) {
+            if (arrayWithNoDuplicatesSize(matrixRow) < size) {
                 return false;
             }
         }
@@ -28,16 +34,13 @@ public class SudokuSolutionChecker {
         return true;
     }
 
-    public boolean hasNoDuplicatesInColumn(int[][] matrixArray) {
+    private boolean hasNoDuplicatesInColumn(int[][] matrixArray) {
         int size = matrixArray[0].length;
 
         for (int column = 0; column < size; column++) {
-            int[] matrixColumn = new int[size];
-            for (int row = 0; row < size; row++) {
-                matrixColumn[row] = matrixArray[row][column];
-            }
+            int[] matrixColumn = extractColumnArray(matrixArray, size, column);
 
-            if (Arrays.stream(matrixColumn).distinct().count() < size) {
+            if (arrayWithNoDuplicatesSize(matrixColumn) < size) {
                 return false;
             }
         }
@@ -45,26 +48,43 @@ public class SudokuSolutionChecker {
         return true;
     }
 
-    public boolean hasNoDuplicatesInSquares(int[][] matrixArray) {
+    private static int[] extractColumnArray(int[][] matrixArray, int size, int column) {
+        int[] matrixColumn = new int[size];
+        for (int row = 0; row < size; row++) {
+            matrixColumn[row] = matrixArray[row][column];
+        }
+        return matrixColumn;
+    }
+
+    private boolean hasNoDuplicatesInSquares(int[][] matrixArray) {
         int numberOfSquaresAndMatrixSize = matrixArray[0].length;
-        int squaresSize = (int) Math.sqrt(numberOfSquaresAndMatrixSize);
 
         for (int square = 0; square < numberOfSquaresAndMatrixSize; square++) {
-            int[] squareArray = new int[numberOfSquaresAndMatrixSize];
-            int arrayLength = 0;
+            int[] squareArray = extractSquareArray(matrixArray, numberOfSquaresAndMatrixSize, square);
 
-            for (int i = square / 2 * squaresSize; i < (square / 2 + 1) * squaresSize; i++) {
-                for (int j = square % 2 * squaresSize; j < (square % 2 + 1) * squaresSize; j++) {
-                    squareArray[arrayLength] = matrixArray[i][j];
-                    arrayLength++;
-                }
-            }
-
-            if (Arrays.stream(squareArray).distinct().count() < numberOfSquaresAndMatrixSize) {
+            if (arrayWithNoDuplicatesSize(squareArray) < numberOfSquaresAndMatrixSize) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private int[] extractSquareArray(int[][] matrixArray, int numberOfSquaresAndMatrixSize, int square) {
+        int squaresSize = (int) Math.sqrt(numberOfSquaresAndMatrixSize);
+        int[] squareArray = new int[numberOfSquaresAndMatrixSize];
+        int arrayLength = 0;
+
+        for (int i = square / 2 * squaresSize; i < (square / 2 + 1) * squaresSize; i++) {
+            for (int j = square % 2 * squaresSize; j < (square % 2 + 1) * squaresSize; j++) {
+                squareArray[arrayLength] = matrixArray[i][j];
+                arrayLength++;
+            }
+        }
+        return squareArray;
+    }
+
+    private long arrayWithNoDuplicatesSize(int[] matrixRow) {
+        return Arrays.stream(matrixRow).distinct().count();
     }
 }
