@@ -38,37 +38,49 @@ public class SudokuSolutionCheckerTest {
 
     @Test
     void matrixWithDuplicateInRowIsNotValid() {
-        int size = 4;
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 4, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertFalse(checker.hasNoDuplicatesInLine(matrixArray, size));
+        assertFalse(checker.hasNoDuplicatesInLine(matrixArray));
     }
 
     @Test
     void matrixWithNoDuplicatesInRowIsValid() {
-        int size = 4;
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertTrue(checker.hasNoDuplicatesInLine(matrixArray, size));
+        assertTrue(checker.hasNoDuplicatesInLine(matrixArray));
     }
 
     @Test
     void matrixWithDuplicateInColumnIsNotValid() {
-        int size = 4;
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 4, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertFalse(checker.hasNoDuplicatesInColumn(matrixArray, size));
+        assertFalse(checker.hasNoDuplicatesInColumn(matrixArray));
     }
 
     @Test
     void matrixWithNoDuplicatesInColumnsIsValid() {
-        int size = 4;
         int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
-        assertTrue(checker.hasNoDuplicatesInColumn(matrixArray, size));
+        assertTrue(checker.hasNoDuplicatesInColumn(matrixArray));
+    }
+
+    @Test
+    void matrixWithDuplicatesInSquaresOfMatrixIsNotValid() {
+        int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertFalse(checker.hasNoDuplicatesInSquares(matrixArray));
+    }
+
+    @Test
+    void matrixWithNoDuplicatesInSquaresOfMatrixIsValid() {
+        int[][] matrixArray = {{1, 2, 3, 4}, {3, 4, 1, 2}, {2, 3, 4, 1}, {4, 1, 2, 3}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertTrue(checker.hasNoDuplicatesInSquares(matrixArray));
     }
 }
