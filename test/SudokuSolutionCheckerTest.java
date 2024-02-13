@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SudokuSolutionCheckerTest {
     @Test
@@ -17,5 +18,21 @@ public class SudokuSolutionCheckerTest {
         SudokuSolutionChecker checker = new SudokuSolutionChecker();
 
         assertTrue(checker.isMatrixASquare(rows, columns));
+    }
+
+    @Test
+    void matrixSizeNotSquareOfAnIntegerGreaterThan3IsNotValid() {
+        int size = 3;
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertFalse(checker.isMatrixSizeValid(size));
+    }
+
+    @Test
+    void matrixSizeSquareOfAnIntegerGreaterThan3IsValid() {
+        int size = 9;
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertTrue(checker.isMatrixSizeValid(size));
     }
 }
