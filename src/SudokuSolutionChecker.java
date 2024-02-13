@@ -1,30 +1,40 @@
 import java.util.Arrays;
 
 public class SudokuSolutionChecker {
-    public boolean isMatrixASquare(int rows, int columns) {
-        return rows == columns;
+    private final Matrix matrix;
+
+    public SudokuSolutionChecker(Matrix matrix) {
+        this.matrix = matrix;
     }
 
-    public boolean isMatrixSizeValid(int size) {
+    public boolean isMatrixValid() {
+        return isMatrixASquare() && isMatrixSizeValid() && hasNoDuplicatesInRowAndColumnAndSquare();
+    }
+
+    private boolean isMatrixASquare() {
+        return matrix.rows() == matrix.columns();
+    }
+
+    private boolean isMatrixSizeValid() {
         int n = 2;
-        while (n * n < size) {
+        while (n * n < matrix.rows()) {
             n++;
         }
 
-        return (n * n == size) && (n * n > 3);
+        return (n * n == matrix.rows()) && (n * n > 3);
     }
 
-    public boolean hasNoDuplicatesInRowAndColumnAndSquare(int[][] matrixArray) {
-        return hasNoDuplicatesInRow(matrixArray)
-                && hasNoDuplicatesInColumn(matrixArray)
-                && hasNoDuplicatesInSquares(matrixArray);
+    private boolean hasNoDuplicatesInRowAndColumnAndSquare() {
+        return hasNoDuplicatesInRow()
+                && hasNoDuplicatesInColumn()
+                && hasNoDuplicatesInSquares();
     }
 
-    private boolean hasNoDuplicatesInRow(int[][] matrixArray) {
-        int size = matrixArray[0].length;
+    private boolean hasNoDuplicatesInRow() {
+        int size = matrix.rows();
 
         for (int row = 0; row < size; row++) {
-            int[] matrixRow = matrixArray[row];
+            int[] matrixRow = matrix.array()[row];
 
             if (arrayWithNoDuplicatesSize(matrixRow) < size) {
                 return false;
@@ -34,11 +44,11 @@ public class SudokuSolutionChecker {
         return true;
     }
 
-    private boolean hasNoDuplicatesInColumn(int[][] matrixArray) {
-        int size = matrixArray[0].length;
+    private boolean hasNoDuplicatesInColumn() {
+        int size = matrix.rows();
 
         for (int column = 0; column < size; column++) {
-            int[] matrixColumn = extractColumnArray(matrixArray, size, column);
+            int[] matrixColumn = extractColumnArray(column);
 
             if (arrayWithNoDuplicatesSize(matrixColumn) < size) {
                 return false;
@@ -48,19 +58,21 @@ public class SudokuSolutionChecker {
         return true;
     }
 
-    private static int[] extractColumnArray(int[][] matrixArray, int size, int column) {
+    private int[] extractColumnArray(int column) {
+        int size = matrix.rows();
+
         int[] matrixColumn = new int[size];
         for (int row = 0; row < size; row++) {
-            matrixColumn[row] = matrixArray[row][column];
+            matrixColumn[row] = matrix.array()[row][column];
         }
         return matrixColumn;
     }
 
-    private boolean hasNoDuplicatesInSquares(int[][] matrixArray) {
-        int numberOfSquaresAndMatrixSize = matrixArray[0].length;
+    private boolean hasNoDuplicatesInSquares() {
+        int numberOfSquaresAndMatrixSize = matrix.rows();
 
         for (int square = 0; square < numberOfSquaresAndMatrixSize; square++) {
-            int[] squareArray = extractSquareArray(matrixArray, numberOfSquaresAndMatrixSize, square);
+            int[] squareArray = extractSquareArray(numberOfSquaresAndMatrixSize, square);
 
             if (arrayWithNoDuplicatesSize(squareArray) < numberOfSquaresAndMatrixSize) {
                 return false;
@@ -70,21 +82,21 @@ public class SudokuSolutionChecker {
         return true;
     }
 
-    private int[] extractSquareArray(int[][] matrixArray, int numberOfSquaresAndMatrixSize, int square) {
+    private int[] extractSquareArray(int numberOfSquaresAndMatrixSize, int square) {
         int squaresSize = (int) Math.sqrt(numberOfSquaresAndMatrixSize);
         int[] squareArray = new int[numberOfSquaresAndMatrixSize];
         int arrayLength = 0;
 
         for (int i = square / 2 * squaresSize; i < (square / 2 + 1) * squaresSize; i++) {
             for (int j = square % 2 * squaresSize; j < (square % 2 + 1) * squaresSize; j++) {
-                squareArray[arrayLength] = matrixArray[i][j];
+                squareArray[arrayLength] = matrix.array()[i][j];
                 arrayLength++;
             }
         }
         return squareArray;
     }
 
-    private long arrayWithNoDuplicatesSize(int[] matrixRow) {
-        return Arrays.stream(matrixRow).distinct().count();
+    private long arrayWithNoDuplicatesSize(int[] array) {
+        return Arrays.stream(array).distinct().count();
     }
 }
