@@ -35,4 +35,22 @@ public class SudokuSolutionCheckerTest {
 
         assertTrue(checker.isMatrixSizeValid(size));
     }
+
+    @Test
+    void matrixWithDuplicateInRowIsNotValid() {
+        int size = 4;
+        int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 4, 2}, {4, 3, 2, 1}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertFalse(checker.doesMatrixHaveDuplicateInLine(matrixArray, size));
+    }
+
+    @Test
+    void matrixWithNoDuplicatesInRowIsValid() {
+        int size = 4;
+        int[][] matrixArray = {{1, 2, 3, 4}, {2, 1, 4, 3}, {3, 4, 1, 2}, {4, 3, 2, 1}};
+        SudokuSolutionChecker checker = new SudokuSolutionChecker();
+
+        assertTrue(checker.doesMatrixHaveDuplicateInLine(matrixArray, size));
+    }
 }
