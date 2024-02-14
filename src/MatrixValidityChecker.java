@@ -69,31 +69,29 @@ public class MatrixValidityChecker {
     }
 
     private boolean hasNoDuplicatesInSquares() {
-        int numberOfSquaresAndMatrixSize = matrix.rows();
+        int squareSize = (int) Math.sqrt(matrix.rows());
 
-        for (int square = 0; square < numberOfSquaresAndMatrixSize; square++) {
-            int[] squareArray = extractSquareArray(numberOfSquaresAndMatrixSize, square);
-
-            if (arrayWithNoDuplicatesSize(squareArray) < numberOfSquaresAndMatrixSize) {
-                return false;
+        for (int i = 0; i < matrix.rows(); i += squareSize) {
+            for (int j = 0; j < matrix.columns(); j += squareSize) {
+                int[] square = extractSquare(matrix.array(), i, j, squareSize);
+                if (arrayWithNoDuplicatesSize(square) < matrix.rows()) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
 
-    private int[] extractSquareArray(int numberOfSquaresAndMatrixSize, int square) {
-        int squaresSize = (int) Math.sqrt(numberOfSquaresAndMatrixSize);
-        int[] squareArray = new int[numberOfSquaresAndMatrixSize];
-        int arrayLength = 0;
-
-        for (int i = square / 2 * squaresSize; i < (square / 2 + 1) * squaresSize; i++) {
-            for (int j = square % 2 * squaresSize; j < (square % 2 + 1) * squaresSize; j++) {
-                squareArray[arrayLength] = matrix.array()[i][j];
-                arrayLength++;
+    private int[] extractSquare(int[][] matrix, int startX, int startY, int size) {
+        int[] square = new int[size * size];
+        int index = 0;
+        for (int i = startX; i < startX + size; i++) {
+            for (int j = startY; j < startY + size; j++) {
+                square[index++] = matrix[i][j];
             }
         }
-        return squareArray;
+        return square;
     }
 
     private long arrayWithNoDuplicatesSize(int[] array) {
